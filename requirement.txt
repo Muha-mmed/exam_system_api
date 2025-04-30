@@ -2,8 +2,7 @@ fastapi
 sqlalchemy
 python-dotenv
 python-jose[cryptography]
-passlib
+passlib[bcrypt]
 pydantic
-bcrypt
 psycopg2
 uvicorn
