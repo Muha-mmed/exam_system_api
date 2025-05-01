@@ -3,3 +3,4 @@ utils
 database.sql
 
 .env
+__pycache__
