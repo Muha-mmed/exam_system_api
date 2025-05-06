@@ -20,7 +20,7 @@ def verify_pwd(password,hash_pwd):
     hash_context.verify(password,hash_pwd)
 
 def signUp(user: CreateUser,db:Session):
-    if existing_user:
+    if existing_user(user.email,db):
         return {"message": "user with email already exist"}
     user = User(
         first_name = user.first_name,
@@ -29,10 +29,8 @@ def signUp(user: CreateUser,db:Session):
         level = user.level,
         hash_password = hash_pwd(user.password)
         )
-    print(user)
     db.add(user)
     db.commit()
-    db.refresh(user)
     return user
 
 def login(email:str,password:str,db:Session):
