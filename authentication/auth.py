@@ -2,7 +2,10 @@ from datetime import datetime,timedelta
 from fastapi import Depends, HTTPException
 from jose import JWTError,jwt
 from fastapi.security import OAuth2PasswordBearer
-import os 
+import os
+from sqlalchemy.orm import Session
+from authentication.models import User
+from database import get_db 
 
 oauthSchema = OAuth2PasswordBearer(tokenUrl="/token")
 
@@ -20,7 +23,7 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
     return encoded_jwt
 
-def current_user(token: str = Depends(oauthSchema)):
+def current_user(db:Session = Depends(get_db),token: str = Depends(oauthSchema)) -> User:
     credentials_exception = HTTPException(
         status_code=401,
         detail= "Could not validate credentials",
@@ -28,9 +31,12 @@ def current_user(token: str = Depends(oauthSchema)):
     )
     try:
       payload = jwt.decode(token,SECRET_KEY,algorithms=[ALGORITHM])
-      email = payload.get({"sub": str })
+      email = payload.get("sub")
       if not email:
           raise credentials_exception
+      user = db.query(User).filter(User.email ==email).first()
+      if not user:
+          raise credentials_exception
+      return user
     except JWTError:
       raise credentials_exception
-    return email
