@@ -2,13 +2,13 @@ from sqlalchemy.orm import Session
 
 from passlib.context import CryptContext
 
-from authentication.models import User
+from authentication.models import Student
 from authentication.schemas import UserSchema,CreateUser
 
 hash_context = CryptContext(schemes=["bcrypt"],deprecated="auto")
 
 def existing_user(email:str,db:Session):
-    user = db.query(User).filter(User.email == email).first()
+    user = db.query(Student).filter(Student.email == email).first()
     if not user:
         return {"message": "user not found"}
     return user
@@ -22,7 +22,7 @@ def verify_pwd(password,hash_pwd):
 def signUp(user: CreateUser,db:Session):
     if existing_user(user.email,db):
         return {"message": "user with email already exist"}
-    user = User(
+    user = Student(
         first_name = user.first_name,
         last_name = user.last_name,
         email = user.email,
