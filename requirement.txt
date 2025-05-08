@@ -7,3 +7,4 @@ pydantic
 psycopg2
 uvicorn
 pydantic[email]
+alembic
