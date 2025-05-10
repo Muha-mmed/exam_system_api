@@ -1,6 +1,5 @@
 from typing import Optional
 from pydantic import BaseModel,EmailStr
-from database import Base,engine
 from utils.constant import UserRole,Level
 
 

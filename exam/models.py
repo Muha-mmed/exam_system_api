@@ -4,17 +4,17 @@ from sqlalchemy.orm import relationship
 
 from database import Base,engine
 
-from utils.constant import AnswerOption
+from utils.constant import AnswerOption,Level
 
 class Exam(Base):
     __tablename__ = 'exams'
     id = Column(Integer,primary_key=True)
-    title = Column(String,max_length=200)
-    subject = Column(String,max_length=100)
-    class_level = Column(String, max_length=50)
-    term = Column(String,max_length=50)
-    duration = Column(Integer,help_text="Duration in minutes")
-    is_published = Column(Boolean,default=False)
+    title = Column(String(200))
+    subject = Column(String(100))
+    class_level = Column(SQLEnum(Level))
+    term = Column(String(50))
+    duration = Column(Integer,comment="Duration in minutes")
+    is_published = Column(Boolean,default=False,nullable=False)
     
     questions = relationship("Question",back_populates='exam')
     exam_attempts = relationship("ExamAttempt",back_populates='exam')
@@ -36,9 +36,10 @@ class Question(Base):
     answers = relationship("StudentAnswer",back_populates='question')
 
 class StudentAnswer(Base):
+    __tablename__ = "student_answers"
     id = Column(Integer,primary_key=True)
     selected_option = Column(String,nullable=False)
-    is_correct = Column(Boolean)
+    is_correct = Column(Boolean,default= False,nullable=False)
     question_id = Column(Integer, ForeignKey("questions.id"))
     student_id = Column(Integer, ForeignKey("students.id"))
     
@@ -46,10 +47,11 @@ class StudentAnswer(Base):
     question = relationship(Question,back_populates='answers')
 
 class ExamAttempt(Base):
+    __tablename__ = "exam_attempts"
     id = Column(Integer,primary_key=True)
     score = Column(Integer)
-    time_taken = Column(Integer)  # in minutes or seconds?
-    date = Column(DateTime, default=datetime.utcnow)
+    time_taken = Column(Integer,comment="Time taken in minutes")  # in minutes or seconds?
+    date = Column(DateTime, default=datetime.utcnow())
     exam_id = Column(Integer, ForeignKey("exams.id"))
     student_id = Column(Integer, ForeignKey("students.id"))
 
