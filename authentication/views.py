@@ -20,8 +20,6 @@ def create_user(user: CreateUser, db:Session= db_dependency):
 
 @auth.post("/login")
 def login_user(email: str,password:str, db:Session= db_dependency):
-    user = login(email,password,db)
-    if user["message"] == "email or password don't correct":
-        raise HTTPException(status_code=401,detail="invalid input")
+    login(email,password,db)
     token = create_access_token({"sub": email})
     return {"access_token": token}

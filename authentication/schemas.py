@@ -15,4 +15,4 @@ class CreateUser(BaseModel):
     last_name: str
     email: EmailStr
     level: Optional[Level] = None
-    password: str
+    hash_password: str

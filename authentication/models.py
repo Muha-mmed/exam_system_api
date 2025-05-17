@@ -10,7 +10,7 @@ class Student(Base):
     first_name = Column(String)
     last_name = Column(String)
     email = Column(String,unique=True)
-    level = Column(SQLEnum(Level),nullable=True,default="NULL")
+    level = Column(SQLEnum(Level),nullable=True)
     role = Column(SQLEnum(UserRole),default=UserRole.student,nullable=False)
     hash_password = Column(String)
     

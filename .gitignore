@@ -1,6 +1,5 @@
 env
-utils
-database.sql
+test.sql
 
 .env
 __pycache__
