@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy import Boolean, Column, DateTime,Integer,String,ForeignKey, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 
-from database import Base,engine
+from database import Base
 
 from utils.constant import AnswerOption,Level
 
@@ -58,5 +58,3 @@ class ExamAttempt(Base):
     
     exam = relationship(Exam,back_populates='exam_attempts')
     student = relationship("Student",back_populates='exam_attempts')
-    
-Base.metadata.create_all(bind=engine)

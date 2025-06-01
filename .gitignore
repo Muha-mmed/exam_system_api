@@ -1,5 +1,6 @@
 env
 test.sql
+readme.md
 
 .env
 __pycache__
