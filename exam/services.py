@@ -1,6 +1,6 @@
 from fastapi import HTTPException,status
 from authentication.models import Student
-from exam.schemas import ExamSchema, QuestionSchema,UpdateExamSchema,CreateExamSchema
+from exam.schemas import ExamSchema, QuestionSchema,UpdateExamSchema,CreateExamSchema, UpdateQuestionSchema
 from exam.models import Exam,Question
 
 from sqlalchemy.orm import Session
@@ -102,11 +102,11 @@ def create_question_svc(user:Student,add_question:QuestionSchema,db:Session):
         db.rollback()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,detail="Exam update failed")
 
-def update_question_svc(user:Student,Q_id:int,new_data:str,db:Session):
+def update_question_svc(user:Student,Q_id:int,new_data:UpdateQuestionSchema,db:Session):
     ques = get_question(Q_id,db)
     try:
       if user.role == 'student':
-          raise HTTPException()
+          raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,detail="You don't have access to this")
       update_Q = new_data.model_dump(exclude_unset = True)
       try:
         for key,value in update_Q.items():

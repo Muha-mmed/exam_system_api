@@ -4,8 +4,8 @@ from database import get_db
 
 from sqlalchemy.orm import Session
 from authentication.auth import JWTBearer, current_user
-from exam.services import create_exam_svc, delete_exam_svc, update_exam_svc
-from exam.schemas import ExamSchema,CreateExamSchema,UpdateExamSchema
+from exam.services import create_exam_svc, create_question_svc, delete_exam_svc, delete_question_svc, update_exam_svc, update_question_svc
+from exam.schemas import ExamSchema,CreateExamSchema, QuestionSchema,UpdateExamSchema, UpdateQuestionSchema
 from utils.constant import Level
 
 from database import Base,engine
@@ -53,3 +53,19 @@ def delete_exam(
 ):
     exam = delete_exam_svc(user,exam_id,db)
     return exam
+
+# question route
+@exam_routes.post('/create/question',dependencies=[Depends(JWTBearer())])
+def create_question(question:QuestionSchema,user:Student=Depends(current_user),db:Session=Depends(get_db)):
+    ques = create_question_svc(user,question,db)
+    return ques
+
+@exam_routes.post('/update/question',dependencies=[Depends(JWTBearer())])
+def create_question(question:UpdateQuestionSchema,Q_id: int,user:Student=Depends(current_user),db:Session=Depends(get_db)):
+    ques = update_question_svc(user,Q_id,question,db)
+    return ques
+
+@exam_routes.delete("/delete/question")
+def delete_question(Q_id:int,user:Student=Depends(current_user),db:Session=Depends(get_db)):
+    question = delete_question_svc(user,Q_id,db)
+    return question
